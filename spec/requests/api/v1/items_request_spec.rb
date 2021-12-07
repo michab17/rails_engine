@@ -41,7 +41,7 @@ RSpec.describe 'Item Requests' do
     expect(response).to be_successful
 
     item = JSON.parse(response.body, symbolize_names: true)
-    
+
     expect(item).to have_key(:id)
     expect(item[:id]).to be_an(Integer)
 
@@ -53,5 +53,25 @@ RSpec.describe 'Item Requests' do
 
     expect(item).to have_key(:unit_price)
     expect(item[:unit_price]).to be_a(Float)
+  end
+
+  it 'can create a new item' do
+    item_params = {
+      merchant_id: @merchant1.id,
+      name: 'Item7',
+      description: 'Is this the last item?',
+      unit_price: 25.0
+    }
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+    created_item = Item.last
+
+    expect(response).to be_successful
+    expect(created_item.title).to eq(item_params[:title])
+    expect(created_item.author).to eq(item_params[:author])
+    expect(created_item.summary).to eq(item_params[:summary])
+    expect(created_item.genre).to eq(item_params[:genre])
+    expect(created_item.number_sold).to eq(item_params[:number_sold])
   end
 end
