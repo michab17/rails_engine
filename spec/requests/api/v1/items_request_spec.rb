@@ -57,7 +57,7 @@ RSpec.describe 'Item Requests' do
 
   it 'can create a new item' do
     item_params = {
-      merchant_id: @merchant1.id,
+      merchant_id: @merchant.id,
       name: 'Item7',
       description: 'Is this the last item?',
       unit_price: 25.0
@@ -68,10 +68,13 @@ RSpec.describe 'Item Requests' do
     created_item = Item.last
 
     expect(response).to be_successful
-    expect(created_item.title).to eq(item_params[:title])
-    expect(created_item.author).to eq(item_params[:author])
-    expect(created_item.summary).to eq(item_params[:summary])
-    expect(created_item.genre).to eq(item_params[:genre])
-    expect(created_item.number_sold).to eq(item_params[:number_sold])
+    expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+    expect(created_item.name).to eq(item_params[:name])
+    expect(created_item.description).to eq(item_params[:description])
+    expect(created_item.unit_price).to eq(item_params[:unit_price])
+  end
+
+  it 'can edit an item' do
+    
   end
 end
