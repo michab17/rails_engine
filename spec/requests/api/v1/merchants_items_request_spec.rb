@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe 'Merchants Items Requests' do
   before do
     @merchant = Merchant.create(name: 'Merchant')
-    @item1 = merchant.items.create(name: 'Item1', description: 'It is an item', unit_price: 5.0)
-    @item2 = merchant.items.create(name: 'Item2', description: 'It is a another item', unit_price: 10.0)
-    @item3 = merchant.items.create(name: 'Item3', description: 'It is yet another item', unit_price: 15.0)
+    @item1 = Item.create!(merchant_id: @merchant.id, name: 'Item1', description: 'It is an item', unit_price: 5.0)
+    @item2 = Item.create!(merchant_id: @merchant.id, name: 'Item2', description: 'It is a another item', unit_price: 10.0)
+    @item3 = Item.create!(merchant_id: @merchant.id, name: 'Item3', description: 'It is yet another item', unit_price: 15.0)
   end
   it 'gets all of a merchants items' do
     get "/api/v1/merchants/#{@merchant.id}/items"
@@ -27,7 +27,7 @@ RSpec.describe 'Merchants Items Requests' do
       expect(item[:description]).to be_a(String)
 
       expect(item).to have_key(:unit_price)
-      expect(item[:unit_price]).to be_a(String)
+      expect(item[:unit_price]).to be_a(Float)
     end
   end
 end
