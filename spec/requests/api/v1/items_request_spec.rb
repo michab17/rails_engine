@@ -41,9 +41,7 @@ RSpec.describe 'Item Requests' do
     expect(response).to be_successful
 
     item = JSON.parse(response.body, symbolize_names: true)
-
-    expect(item.count).to eq 1
-
+    
     expect(item).to have_key(:id)
     expect(item[:id]).to be_an(Integer)
 
