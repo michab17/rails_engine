@@ -75,6 +75,15 @@ RSpec.describe 'Item Requests' do
   end
 
   it 'can edit an item' do
-    
+    new_item = Item.create!(merchant_id: @merchant.id, name: 'Old Name', description: 'It is an item', unit_price: 5.0)
+
+    item_params = { name: "New Name" }
+    headers = {"CONTENT_TYPE" => "application/json"}
+  
+    patch "/api/v1/items/#{new_item.id}", headers: headers, params: JSON.generate({item: item_params})
+    new_item.reload
+    expect(response).to be_successful
+    expect(new_item.name).to_not eq('Old Name')
+    expect(new_item.name).to eq("New Name")
   end
 end
