@@ -86,4 +86,14 @@ RSpec.describe 'Item Requests' do
     expect(new_item.name).to_not eq('Old Name')
     expect(new_item.name).to eq("New Name")
   end
+
+  it 'can delete an item' do
+    new_item = Item.create!(merchant_id: @merchant.id, name: 'Old Name', description: 'It is an item', unit_price: 5.0)
+
+    delete "/api/v1/items/#{new_item.id}"
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(6)
+    expect{Item.find(new_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
 end
