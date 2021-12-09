@@ -25,6 +25,23 @@ class Api::V1::ItemsController < ApplicationController
     render json: item
   end
 
+  def find_all
+    if params[:name]
+      if Item.where('name ILIKE ?', "%#{params[:name]}%")
+        render json: ItemSerializer.new(Item.where('name ILIKE ?', "%#{params[:name]}%"))
+      else
+        render json: {data: []}
+      end
+    end
+    if params[:max_price]
+      if Item.where("unit_price <= #{params[:unit_price]}")
+        render json: ItemSerializer.new(Item.where("unit_price <= #{params[:max_price]}"))
+      else
+        render json: {data: []}
+      end
+    end
+  end
+
   private
 
   def item_params
