@@ -32,10 +32,15 @@ class Api::V1::ItemsController < ApplicationController
       else
         render json: {data: []}
       end
-    end
-    if params[:max_price]
-      if Item.where("unit_price <= #{params[:unit_price]}")
+    elsif params[:max_price]
+      if Item.where("unit_price <= #{params[:max_price]}")
         render json: ItemSerializer.new(Item.where("unit_price <= #{params[:max_price]}"))
+      else
+        render json: {data: []}
+      end
+    elsif params[:min_price]
+      if Item.where("unit_price >= #{params[:min_price]}")
+        render json: ItemSerializer.new(Item.where("unit_price >= #{params[:min_price]}"))
       else
         render json: {data: []}
       end
