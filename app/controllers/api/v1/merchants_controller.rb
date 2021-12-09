@@ -9,7 +9,7 @@ class Api::V1::MerchantsController < ApplicationController
 
   def find
     if params[:name]
-      if Merchant.where('name ILIKE ?', "%#{params[:name]}%")
+      if Merchant.where('name ILIKE ?', "%#{params[:name]}%").first
         render json: MerchantSerializer.new(Merchant.where('name ILIKE ?', "%#{params[:name]}%").first)
       else
         render json: {data: {}}
