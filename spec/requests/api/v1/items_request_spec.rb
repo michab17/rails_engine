@@ -133,7 +133,7 @@ RSpec.describe 'Item Requests' do
     expect(items[:data][:attributes][:description]).to eq(@item1.description)
   end
 
-  it 'can find one item by price' do
+  it 'can find one item by max price' do
     get "/api/v1/items/find?max_price=6.0"
 
     items = JSON.parse(response.body, symbolize_names: true)
@@ -142,5 +142,16 @@ RSpec.describe 'Item Requests' do
     expect(items[:data][:id]).to eq(@item1.id.to_s)
     expect(items[:data][:attributes][:name]).to eq(@item1.name)
     expect(items[:data][:attributes][:description]).to eq(@item1.description)
+  end
+
+  it 'can find one item by min price' do
+    get "/api/v1/items/find?min_price=6.0"
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(items[:data][:id]).to eq(@item2.id.to_s)
+    expect(items[:data][:attributes][:name]).to eq(@item2.name)
+    expect(items[:data][:attributes][:description]).to eq(@item2.description)
   end
 end
