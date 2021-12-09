@@ -29,7 +29,7 @@ RSpec.describe 'Merchant Requests' do
     expect(merchant[:data][:attributes][:name]).to be_a(String)
   end
 
-  it 'can find one merchant by search' do
+  it 'can find one merchant by name search' do
     get "/api/v1/merchants/find?name=Billy"
 
     merchant = JSON.parse(response.body, symbolize_names: true)
@@ -37,5 +37,17 @@ RSpec.describe 'Merchant Requests' do
     expect(response).to be_successful
     expect(merchant[:data][:id]).to eq(@merchant1.id.to_s)
     expect(merchant[:data][:attributes][:name]).to eq(@merchant1.name)
+  end
+
+  it 'can find all merchants by name search' do
+    get "/api/v1/merchants/find_all?name=i"
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(merchant[:data][0][:id]).to eq(@merchant1.id.to_s)
+    expect(merchant[:data][0][:attributes][:name]).to eq(@merchant1.name)
+    expect(merchant[:data].last[:id]).to eq(@merchant3.id.to_s)
+    expect(merchant[:data].last[:attributes][:name]).to eq(@merchant3.name)
   end
 end
