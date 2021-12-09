@@ -81,13 +81,30 @@ RSpec.describe 'Item Requests' do
   end
 
   it 'can find all items with a search by name' do
-    get "/api/v1/items/find?name=pen"
+    get "/api/v1/items/find_all?name=item"
 
     items = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to be_successful
-    expect(item[:data][0][:id]).to eq(@item1.id.to_s)
-    expect(item[:data][0][:attributes][:name]).to eq(@item1.name)
-    expect(item[:data][0][:attributes][:description]).to eq(@item1.description)
+    expect(items[:data][0][:id]).to eq(@item1.id.to_s)
+    expect(items[:data][0][:attributes][:name]).to eq(@item1.name)
+    expect(items[:data][0][:attributes][:description]).to eq(@item1.description)
+    expect(items[:data].last[:id]).to eq(@item6.id.to_s)
+    expect(items[:data].last[:attributes][:name]).to eq(@item6.name)
+    expect(items[:data].last[:attributes][:description]).to eq(@item6.description)
+  end
+
+  it 'can find all items with a search by name' do
+    get "/api/v1/items/find_all?max_price=11.00"
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(items[:data][0][:id]).to eq(@item1.id.to_s)
+    expect(items[:data][0][:attributes][:name]).to eq(@item1.name)
+    expect(items[:data][0][:attributes][:description]).to eq(@item1.description)
+    expect(items[:data].last[:id]).to eq(@item5.id.to_s)
+    expect(items[:data].last[:attributes][:name]).to eq(@item5.name)
+    expect(items[:data].last[:attributes][:description]).to eq(@item5.description)
   end
 end
