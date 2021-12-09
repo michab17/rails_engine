@@ -20,7 +20,9 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    render json: ItemSerializer.new(Item.delete(params[:id]))
+    item = Item.find(params[:id])
+    Item.destroy(params[:id])
+    render json: item
   end
 
   private
