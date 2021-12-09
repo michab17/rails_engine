@@ -109,7 +109,7 @@ RSpec.describe 'Item Requests' do
   end
 
   it 'can find all items with a search by min price' do
-    get "/api/v1/items/find_all?min_price=6.00"
+    get "/api/v1/items/find_all?min_price=6.0"
 
     items = JSON.parse(response.body, symbolize_names: true)
 
