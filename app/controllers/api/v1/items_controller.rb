@@ -25,6 +25,16 @@ class Api::V1::ItemsController < ApplicationController
     render json: item
   end
 
+  def find
+    if params[:name]
+      if Item.where('name ILIKE ?', "%#{params[:name]}%").first
+        render json: ItemSerializer.new(Item.where('name ILIKE ?', "%#{params[:name]}%").first)
+      else
+        render json: {data: {}}
+      end
+    end
+  end
+
   def find_all
     if params[:name]
       if Item.where('name ILIKE ?', "%#{params[:name]}%")
