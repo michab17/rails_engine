@@ -14,8 +14,6 @@ class Api::V1::ItemsController < ApplicationController
   def update
     if params[:merchant_id] == nil || Merchant.find(params[:merchant_id])
       render json: ItemSerializer.new(Item.update(params[:id], item_params))
-    else
-      render json: { errors: { description: 'Merchant not found' } }, status: 404
     end
   end
 
