@@ -27,23 +27,11 @@ class Api::V1::ItemsController < ApplicationController
 
   def find
     if params[:name]
-      if Item.where('name ILIKE ?', "%#{params[:name]}%").first
-        render json: ItemSerializer.new(Item.where('name ILIKE ?', "%#{params[:name]}%").first)
-      else
-        render json: {data: {}}
-      end
+      render json: ItemSerializer.new(Item.find_by_name(params[:name]))
     elsif params[:max_price]
-      if Item.where("unit_price <= #{params[:max_price]}").first
-        render json: ItemSerializer.new(Item.where("unit_price <= #{params[:max_price]}").first)
-      else
-        render json: {data: []}
-      end
+      render json: ItemSerializer.new(Item.find_by_max_price(params[:max_price]))
     elsif params[:min_price]
-      if Item.where("unit_price >= #{params[:min_price]}").first
-        render json: ItemSerializer.new(Item.where("unit_price >= #{params[:min_price]}").first)
-      else
-        render json: {data: []}
-      end
+      render json: ItemSerializer.new(Item.find_by_min_price(params[:min_price]))
     end
   end
 
@@ -52,19 +40,25 @@ class Api::V1::ItemsController < ApplicationController
       if Item.where('name ILIKE ?', "%#{params[:name]}%")
         render json: ItemSerializer.new(Item.where('name ILIKE ?', "%#{params[:name]}%"))
       else
-        render json: {data: []}
+        render json: {data: []}, status: 400
       end
     elsif params[:max_price]
+      if params[:max_price].to_i < 0
+        render json: { error: "This is an error", status: 400 }, status: 400
+      end
       if Item.where("unit_price <= #{params[:max_price]}")
         render json: ItemSerializer.new(Item.where("unit_price <= #{params[:max_price]}"))
       else
-        render json: {data: []}
+        render json: {data: []}, status: 400
       end
     elsif params[:min_price]
+      if params[:min_price].to_i < 0
+        render json: { error: "This is an error", status: 400 }, status: 400
+      end
       if Item.where("unit_price >= #{params[:min_price]}")
         render json: ItemSerializer.new(Item.where("unit_price >= #{params[:min_price]}"))
       else
-        render json: {data: []}
+        render json: {data: []}, status: 400
       end
     end
   end
