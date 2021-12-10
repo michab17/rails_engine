@@ -26,30 +26,30 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def find
-    if params[:name] && !params[:max_price] && !params[:min_price]
-      render json: ItemSerializer.new(Item.find_by_name(params[:name]))
-    elsif params[:max_price] && !params[:name] && !params[:min_price]
-      render json: ItemSerializer.new(Item.find_by_max_price(params[:max_price]))
-    elsif params[:min_price] && !params[:max_price] && !params[:name]
-      render json: ItemSerializer.new(Item.find_by_min_price(params[:min_price]))
-    elsif params[:min_price].to_i < 0 || params[:max_price].to_i < 0
+    if params[:min_price].to_i < 0 || params[:max_price].to_i < 0
       render json: { error: "The parameters were entered incorrectly", status: 400 }, status: 400
+    elsif Item.where('name ILIKE ?', "%#{params[:name]}%").first && params[:max_price].nil? && params[:min_price].nil?
+      render json: ItemSerializer.new(Item.find_by_name(params[:name]))
+    elsif Item.find_by_min_price(params[:min_price]) && params[:name].nil? && params[:max_price].nil?
+      render json: ItemSerializer.new(Item.find_by_min_price(params[:min_price]))
+    elsif Item.find_by_max_price(params[:max_price]) && params[:name].nil? && params[:min_price].nil?
+      render json: ItemSerializer.new(Item.find_by_max_price(params[:max_price]))
     else 
-      render json: {data: []}, status: 400
+      render json: {data: {}}, status: 400
     end
   end
 
   def find_all
-    if params[:name]
-      render json: ItemSerializer.new(Item.find_all_by_name(params[:name]))
-    elsif params[:max_price]
-      render json: ItemSerializer.new(Item.find_all_by_max_price(params[:max_price]))
-    elsif params[:min_price]
-      render json: ItemSerializer.new(Item.find_all_by_min_price(params[:min_price]))
-    elsif params[:max_price].to_i < 0 || params[:min_price].to_i < 0
+    if params[:max_price].to_i < 0 || params[:min_price].to_i < 0
       render json: { error: "This is an error", status: 400 }, status: 400
+    elsif Item.where('name ILIKE ?', "%#{params[:name]}%") && params[:max_price].nil? && params[:min_price].nil?
+      render json: ItemSerializer.new(Item.find_all_by_name(params[:name]))
+    elsif Item.find_by_min_price(params[:min_price]) && params[:name].nil? && params[:max_price].nil?
+      render json: ItemSerializer.new(Item.find_all_by_min_price(params[:min_price]))
+    elsif Item.find_by_max_price(params[:max_price]) && params[:name].nil? && params[:min_price].nil?
+      render json: ItemSerializer.new(Item.find_all_by_max_price(params[:max_price]))
     else
-      render json: {data: []}, status: 400
+      render json: {data: {}}, status: 400
     end
   end
 

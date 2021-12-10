@@ -163,4 +163,32 @@ RSpec.describe 'Item Requests' do
     expect(response).to_not be_successful
     expect(response.status).to eq 400
   end
+
+  it 'returns an error if the name has no matches' do
+    get "/api/v1/items/find?name=thishasnomatches"
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq 400
+  end
+
+  it 'returns an error if name and price are sent' do
+    get '/api/v1/items/find?name=ring&max_price=50'
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq 400
+  end
+
+  it 'returns an error min price is so big nothing matchs' do
+    get '/api/v1/items/find?min_price=10000.0'
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq 400
+  end
+
+  # it 'find_all: returns an error if the name has no matches' do
+  #   get "/api/v1/items/find_all?name=thishasnomatches"
+  #   # require 'pry'; binding.pry
+  #   expect(response).to_not be_successful
+  #   expect(response.status).to eq 400
+  # end
 end
