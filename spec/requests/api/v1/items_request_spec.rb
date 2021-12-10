@@ -193,11 +193,4 @@ RSpec.describe 'Item Requests' do
     expect(response).to_not be_successful
     expect(response.status).to eq 400
   end
-
-  # it 'find_all: returns an error if the name has no matches' do
-  #   get "/api/v1/items/find_all?name=thishasnomatches"
-  #   # require 'pry'; binding.pry
-  #   expect(response).to_not be_successful
-  #   expect(response.status).to eq 400
-  # end
 end
