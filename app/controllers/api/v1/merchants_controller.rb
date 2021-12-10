@@ -12,7 +12,7 @@ class Api::V1::MerchantsController < ApplicationController
       if Merchant.where('name ILIKE ?', "%#{params[:name]}%").first
         render json: MerchantSerializer.new(Merchant.where('name ILIKE ?', "%#{params[:name]}%").first)
       else
-        render json: {data: {}}
+        render json: {data: {}}, status: 400
       end
     end
   end
@@ -22,7 +22,7 @@ class Api::V1::MerchantsController < ApplicationController
       if Merchant.where('name ILIKE ?', "%#{params[:name]}%").first
         render json: MerchantSerializer.new(Merchant.where('name ILIKE ?', "%#{params[:name]}%"))
       else
-        render json: {data: []}
+        render json: {data: []}, status: 400
       end
     end
   end
