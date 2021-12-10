@@ -50,4 +50,22 @@ RSpec.describe 'Merchant Requests' do
     expect(merchant[:data].last[:id]).to eq(@merchant3.id.to_s)
     expect(merchant[:data].last[:attributes][:name]).to eq(@merchant3.name)
   end
+
+  it 'find: returns an error if name doesnt match' do
+    get "/api/v1/merchants/find?name=thisisnotaname"
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq 400
+  end
+
+  it 'find_all: returns an error if name doesnt match' do
+    get "/api/v1/merchants/find_all?name=thisisnotaname"
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq 400
+  end
 end

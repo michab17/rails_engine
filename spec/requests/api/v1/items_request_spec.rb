@@ -155,8 +155,17 @@ RSpec.describe 'Item Requests' do
     expect(items[:data][:attributes][:description]).to eq(@item2.description)
   end
 
-  it 'returns an error if the min price is less than zero' do
+  it 'find: returns an error if the min price is less than zero' do
     get "/api/v1/items/find?min_price=-1.0"
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq 400
+  end
+
+  it 'find_all: returns an error if the min price is less than zero' do
+    get "/api/v1/items/find_all?min_price=-1.0"
 
     items = JSON.parse(response.body, symbolize_names: true)
 
