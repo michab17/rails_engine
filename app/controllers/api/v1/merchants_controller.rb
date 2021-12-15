@@ -26,4 +26,11 @@ class Api::V1::MerchantsController < ApplicationController
       end
     end
   end
+
+  def most_items
+    if params[:quantity].to_i
+      quantity = params[:quantity]
+      render json: QuantityMerchantsSerializer.new(Merchant.most_items(quantity))
+    end
+  end
 end
